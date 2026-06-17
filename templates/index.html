@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ profile.name }} — {{ profile.role }}</title>
+  <meta name="description" content="{{ profile.tagline }}" />
+
+  <!-- Fonts: Fraunces (display, formal-serif) + Inter (body, modern) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">{{ profile.name.split(' ')[0] }}<span class="dot">.</span></a>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#certificates">Certificates</a>
+        <a href="#publications">Publications</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="nav-cta" href="mailto:{{ profile.email }}">Let's talk →</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="pill fade"><span class="dot-live"></span> Available · {{ profile.location }}</span>
+
+        <h1 class="fade delay-1">
+          {{ profile.name.split(' ')[0] }}
+          <span class="accent">{{ profile.name.split(' ', 1)[1] if ' ' in profile.name else '' }}</span>
+        </h1>
+
+        <p class="role fade delay-2">{{ profile.role }} · Business Analyst · Digital Marketing</p>
+        <p class="tagline fade delay-2">{{ profile.tagline }}</p>
+
+        <div class="cta-row fade delay-3">
+          <a class="btn btn-primary" href="#projects">View Projects →</a>
+          <a class="btn btn-ghost" href="#contact">Contact Me</a>
+          <a class="btn btn-link"
+            href="{{ url_for('static', filename='files/Alfi_Hidayatur_CV.pdf') }}"
+            download>
+            ↗ Download CV
+          </a>
+        </div>
+      </div>
+
+      <div class="portrait-wrap fade delay-2">
+        <div class="portrait-glow"></div>
+
+        <div class="portrait">
+          <img
+            src="{{ url_for('static', filename='alfi.png') }}"
+            alt="Alfi Hidayatur"
+            class="profile-photo"
+          >
+        </div>
+      </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <span class="section-eyebrow fade">About Me</span>
+      <h2 class="section-title fade">Turning data into <em>decisions</em></h2>
+
+      <div class="about-grid">
+        <div class="fade delay-1">
+          <p>As a Data Science graduate working in digital marketing, I leverage data to support business decisions and improve marketing performance. With experience in data analysis, e-commerce operations, and digital campaigns, I use tools such as Python, SQL, and Power BI to transform data into actionable insights that drive business growth.
+          </p>
+
+          <div class="tag-row">
+            {% for t in profile.tags %}
+              <span class="tag">{{ t }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature fade delay-1">
+            <h4>Data Analysis</h4>
+            <p>Exploring, cleaning, and analyzing data to uncover trends, measure performance, and support data-driven decision making.</p>
+          </div>
+          <div class="feature fade delay-2">
+            <h4>Business Intelligence</h4>
+            <p>Transforming business data into meaningful insights through reporting, KPI tracking, and performance monitoring.</p>
+          </div>
+          <div class="feature fade delay-3">
+            <h4>Database Management</h4>
+            <p>Managing, designing, and optimizing databases using SQL to ensure data accuracy, integrity, and efficient data processing.</p>
+          </div>
+          <div class="feature fade delay-4">
+            <h4>Campaign Analysis</h4>
+            <p>Evaluating marketing campaigns, customer behavior, and sales performance to identify opportunities for growth and optimization.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats fade delay-2">
+        {% for s in profile.stats %}
+          <div class="stat">
+            <div class="num">{{ s.num }}</div>
+            <div class="label">{{ s.label }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <span class="section-eyebrow fade">Experience</span>
+      <h2 class="section-title fade">Professional <em>Journey</em></h2>
+      <p class="section-lead fade delay-1">A timeline of roles where I delivered analytical work in real environments.</p>
+
+      <div class="timeline">
+        {% for e in experience %}
+          <div class="t-item fade">
+            <div class="t-period">{{ e.period }}</div>
+            <h3 class="t-role">{{ e.role }}</h3>
+            <div class="t-company">{{ e.company }}</div>
+            <ul class="t-points">
+              {% for p in e.points %}<li>{{ p }}</li>{% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <span class="section-eyebrow fade">Selected Work</span>
+      <h2 class="section-title fade">Projects &amp; <em>Case Studies</em></h2>
+      <p class="section-lead fade delay-1">A handful of recent builds that reflect how I approach problems end-to-end.</p>
+
+      <div class="proj-grid">
+        {% for p in projects %}
+          <article class="proj fade">
+            <div class="proj-num">— {{ p.num }}</div>
+            <h3>{{ p.title }}</h3>
+            <p>{{ p.desc }}</p>
+            <div class="proj-tags">
+              {% for tg in p.tags %}<span>{{ tg }}</span>{% endfor %}
+            </div>
+            <div class="proj-links">
+              <a href="{{ p.github }}" target="_blank" rel="noopener">↗ Code</a>
+              <a href="{{ p.demo }}"   target="_blank" rel="noopener">↗ Live demo</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <span class="section-eyebrow fade">Toolkit</span>
+      <h2 class="section-title fade">Skills &amp; <em>Tools</em></h2>
+      <p class="section-lead fade delay-1">The stack I rely on to ship analytical work — from raw data to final report.</p>
+
+      <div class="skill-grid">
+        {% for sk in skills %}
+          <div class="skill fade">
+            <div class="ico">{{ sk.icon }}</div>
+            <h4>{{ sk.category }}</h4>
+            <ul>
+              {% for it in sk['list'] %}<li>{{ it }}</li>{% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATES -->
+  <section id="certificates">
+    <div class="container">
+
+      <span class="section-eyebrow fade">
+        Credentials
+      </span>
+
+      <h2 class="section-title fade">
+        Certificates & <em>Credentials</em>
+      </h2>
+
+      <p class="section-lead fade delay-1">
+        Professional certifications that validate my expertise in data, analytics, and technology.
+      </p>
+
+      <div class="cert-wall">
+
+        <!-- Certificate 1 -->
+        <div class="cert-badge fade">
+          <div class="cert-head">
+
+            <div class="cert-content">
+              <h3>English Proficiency Test</h3>
+
+              <p class="cert-org">
+                Language Center • 2025
+              </p>
+
+              <div class="cert-id">
+                <span>Credential ID:</span>
+                S4260764121
+              </div>
+            </div>
+
+            <a
+              href="{{ url_for('static', filename='files/ept.pdf') }}"
+              target="_blank"
+              class="cert-link"
+            >
+              View Certificate ↗
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Certificate 2 -->
+        <div class="cert-badge fade">
+          <div class="cert-head">
+
+            <div class="cert-content">
+              <h3>Junior Web Programming</h3>
+
+              <p class="cert-org">
+                Badan Nasional Sertifikasi Profesi • 2024 • Expires Oct 2027
+              </p>
+
+              <div class="cert-id">
+                <span>Credential ID:</span>
+                62010.2513.3.0005499.2024
+              </div>
+            </div>
+
+            <a
+              href="{{ url_for('static', filename='files/jwp.pdf') }}"
+              target="_blank"
+              class="cert-link"
+            >
+              View Certificate ↗
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Certificate 3 -->
+        <div class="cert-badge fade">
+          <div class="cert-head">
+
+            <div class="cert-content">
+              <h3>Dasar Data Science</h3>
+
+              <p class="cert-org">
+                Dicoding Indonesia • 2023 • Expires Dec 2026
+              </p>
+
+              <div class="cert-id">
+                <span>Credential ID:</span>
+                1OP8WYWJLXQK
+              </div>
+            </div>
+
+            <a
+              href="{{ url_for('static', filename='files/dsdicoding.pdf') }}"
+              target="_blank"
+              class="cert-link"
+            >
+              View Certificate ↗
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Certificate 4 -->
+        <div class="cert-badge fade">
+          <div class="cert-head">
+
+            <div class="cert-content">
+              <h3>
+                Surat Pencatatan Ciptaan: Manual Book Pelayanan Statistik Terpadu Digital Badan Pusat Statistik Kota Surabaya
+              </h3>
+
+              <p class="cert-org">
+                Kementerian Hukum dan Hak Asasi Manusia Republik Indonesia • 2023
+              </p>
+
+              <div class="cert-id">
+                <span>Credential ID:</span>
+                000562791
+              </div>
+            </div>
+
+            <a
+              href="{{ url_for('static', filename='files/hki.pdf') }}"
+              target="_blank"
+              class="cert-link"
+            >
+              View Certificate ↗
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Certificate 5 -->
+        <div class="cert-badge fade">
+          <div class="cert-head">
+
+            <div class="cert-content">
+              <h3>Data Analyst</h3>
+
+              <p class="cert-org">
+                Smartpath • 2024
+              </p>
+
+              <div class="cert-id">
+                <span>Credential ID:</span>
+                266/SP/XI/2024
+              </div>
+            </div>
+
+            <a
+              href="{{ url_for('static', filename='files/smartpath.pdf') }}"
+              target="_blank"
+              class="cert-link"
+            >
+              View Certificate ↗
+            </a>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+<!-- PUBLICATIONS -->
+<section id="publications">
+  <div class="container">
+
+    <span class="section-eyebrow fade">
+      Publications
+    </span>
+
+    <h2 class="section-title fade">
+      Research & <em>Publications</em>
+    </h2>
+
+    <p class="section-lead fade delay-1">
+      Selected research projects, publications, and academic works focused on data science, forecasting, and machine learning.
+    </p>
+
+    <div class="pub-list">
+
+      <!-- Publication 1 -->
+      <article class="pub-item fade">
+
+        <div class="pub-year">
+          2025
+        </div>
+
+        <div class="pub-content-wrap">
+
+          <div class="pub-content">
+
+            <h3>
+              Hybrid Prediction Model Fuzzy Time Series-LSTM on Stock Price Data with Volatility Variation
+            </h3>
+
+            <div class="pub-meta">
+              Journal Binary Digital Technology • December 2025
+            </div>
+
+            <p>
+              Developed a hybrid forecasting model combining Fuzzy Time Series and Long Short-Term Memory (LSTM) to improve stock market prediction accuracy and capture nonlinear temporal patterns.
+            </p>
+
+          </div>
+
+          <a
+            href="{{ url_for('static', filename='files/bitech.pdf') }}"
+            target="_blank"
+            class="pub-link"
+          >
+            View Publication ↗
+          </a>
+
+        </div>
+
+      </article>
+
+      <!-- Publication 2 -->
+      <article class="pub-item fade">
+
+        <div class="pub-year">
+          2024
+        </div>
+
+        <div class="pub-content-wrap">
+
+          <div class="pub-content">
+
+            <h3>
+              Pengembangan Proses Bisnis Pelayanan Statistik Terpadu Badan Pusat Statistik Kota Surabaya Menggunakan Metode Prototyping
+            </h3>
+
+            <div class="pub-meta">
+              Journal of Technology and Informatics • Universitas Dinamika Surabaya
+            </div>
+
+            <p>
+              Designed and developed a Digital Integrated Statistical Service prototype using the Prototyping methodology to improve public access to statistical information and enhance service efficiency.
+            </p>
+
+          </div>
+
+          <a
+            href="{{ url_for('static', filename='files/joti.pdf') }}"
+            target="_blank"
+            class="pub-link"
+          >
+            View Publication ↗
+          </a>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <span class="section-eyebrow fade">Get in touch</span>
+      <h2 class="section-title fade">Let's build something <em>meaningful</em></h2>
+      <p class="section-lead fade delay-1">Open to data analyst roles, freelance projects, and collaborations.</p>
+
+      <div class="contact-actions fade delay-2">
+        <a class="btn btn-primary" href="mailto:{{ profile.email }}">Email me →</a>
+        <a class="btn btn-ghost" href="{{ profile.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn-ghost" href="{{ profile.github }}" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> {{ profile.name }} — Crafted with care.
+    </div>
+  </footer>
+
+  <script>
+    // fade-in on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".fade").forEach((el) => io.observe(el));
+
+    // sticky nav border on scroll
+    const nav = document.getElementById("nav");
+    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    // year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
